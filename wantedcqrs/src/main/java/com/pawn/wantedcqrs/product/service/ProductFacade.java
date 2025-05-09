@@ -43,6 +43,10 @@ public class ProductFacade {
         List<ProductTagDto> productTagDtos = request.toProductTagDtos(savedProductDto.getId());
         productService.saveTagsByProductId(savedProductDto.getId(), productTagDtos);
 
+        // ProductImage
+        List<ProductImageDto> productImageDtos = request.toProductImageDtos(savedProductDto.getId());
+        productService.saveImagesByProductId(savedProductDto.getId(), productImageDtos);
+
 
         return CreateProductResponse.builder()
                 .id(savedProductDto.getId())

@@ -353,4 +353,17 @@ public class CreateProductRequest {
     }
 
 
+    public List<ProductImageDto> toProductImageDtos(Long productId) {
+        return this.images.stream().map(image -> {
+            ProductImageDto dto = new ProductImageDto();
+            dto.setProductId(productId);
+            dto.setPrimary(image.isPrimary());
+            dto.setUrl(image.getUrl());
+            dto.setAltText(image.getAltText());
+            dto.setDisplayOrder(image.getDisplayOrder());
+            dto.setOptionId(image.getOptionId());
+            return dto;
+        }).toList();
+    }
+
 }

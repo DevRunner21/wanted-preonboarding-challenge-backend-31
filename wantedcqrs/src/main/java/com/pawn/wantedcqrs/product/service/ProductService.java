@@ -4,9 +4,11 @@ import com.pawn.wantedcqrs.common.exception.e4xx.ConflictException;
 import com.pawn.wantedcqrs.product.dto.*;
 import com.pawn.wantedcqrs.product.entity.Product;
 import com.pawn.wantedcqrs.product.entity.ProductCategory;
+import com.pawn.wantedcqrs.product.entity.ProductImage;
 import com.pawn.wantedcqrs.product.entity.ProductTag;
 import com.pawn.wantedcqrs.product.repository.ProductRepository;
 import com.pawn.wantedcqrs.productOptionGroup.repository.ProductCategoryRepository;
+import com.pawn.wantedcqrs.productOptionGroup.repository.ProductImageRepository;
 import com.pawn.wantedcqrs.productOptionGroup.repository.ProductTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class ProductService {
     private final ProductCategoryRepository productCategoryRepository;
 
     private final ProductTagRepository productTagRepository;
+
+    private final ProductImageRepository productImageRepository;
 
     @Transactional
     public ProductDto create(ProductDto productParam) {
@@ -78,4 +82,18 @@ public class ProductService {
         productTagRepository.saveAll(productTags);
     }
 
+    @Transactional
+    public void saveImagesByProductId(Long productId, List<ProductImageDto> productImageDtos) {
+        List<ProductImage> productImages = productImageDtos.stream()
+                .map(dto -> ProductImage.builder()
+                        .productId(productId)
+                        .isPrimary(dto.isPrimary())
+                        .url(dto.getUrl())
+                        .altText(dto.getAltText())
+                        .displayOrder(dto.getDisplayOrder())
+                        .optionId(dto.getOptionId())
+                        .build()).toList();
+
+        productImageRepository.saveAll(productImages);
+    }
 }
