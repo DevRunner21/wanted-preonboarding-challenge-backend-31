@@ -1,44 +1,47 @@
 package com.pawn.wantedcqrs.common.dto.response;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CustomPageResponse<T> {
 
-    private CustomPagination customPagination;
+    private final CustomPagination pagination;
 
-    private List<T> items;
+    private final List<T> items;
 
-    protected CustomPageResponse(CustomPagination customPagination, List<T> items) {
-        this.customPagination = customPagination;
+    protected CustomPageResponse(CustomPagination pagination, List<T> items) {
+        this.pagination = pagination;
         this.items = items;
     }
 
     public static <T> CustomPageResponse<T> of(Page<T> page) {
-        return new CustomPageResponse(
-                new CustomPagination(page.getTotalElements(), page.getNumber(), page.getTotalPages())
+        return new CustomPageResponse<>(
+                new CustomPagination(page.getTotalElements(), page.getTotalPages(), page.getNumber(), page.getSize())
                 , page.getContent()
         );
     }
 
-    private static class CustomPagination {
+    @Getter
+    public static class CustomPagination {
 
-        private Long totalCount;
+        private final Long totalCount;
 
-        private int pageIndex;
+        private final int totalPages;
 
-        private int pageSize;
+        private final int pageIndex;
 
-        public CustomPagination(Long totalCount, int pageIndex, int pageSize) {
+        private final int pageSize;
+
+        protected CustomPagination(Long totalCount, int totalPages, int pageIndex, int pageSize) {
             this.totalCount = totalCount;
+            this.totalPages = totalPages;
             this.pageIndex = pageIndex;
             this.pageSize = pageSize;
         }
+
     }
+
 }

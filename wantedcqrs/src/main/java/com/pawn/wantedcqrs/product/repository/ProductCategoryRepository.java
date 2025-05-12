@@ -1,4 +1,4 @@
-package com.pawn.wantedcqrs.productOptionGroup.repository;
+package com.pawn.wantedcqrs.product.repository;
 
 import com.pawn.wantedcqrs.product.entity.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;

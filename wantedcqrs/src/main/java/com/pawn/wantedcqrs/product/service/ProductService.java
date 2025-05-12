@@ -6,15 +6,21 @@ import com.pawn.wantedcqrs.product.entity.Product;
 import com.pawn.wantedcqrs.product.entity.ProductCategory;
 import com.pawn.wantedcqrs.product.entity.ProductImage;
 import com.pawn.wantedcqrs.product.entity.ProductTag;
+import com.pawn.wantedcqrs.product.repository.ProductCategoryRepository;
+import com.pawn.wantedcqrs.product.repository.ProductImageRepository;
 import com.pawn.wantedcqrs.product.repository.ProductRepository;
-import com.pawn.wantedcqrs.productOptionGroup.repository.ProductCategoryRepository;
-import com.pawn.wantedcqrs.productOptionGroup.repository.ProductImageRepository;
-import com.pawn.wantedcqrs.productOptionGroup.repository.ProductTagRepository;
+import com.pawn.wantedcqrs.product.repository.ProductTagRepository;
+import com.pawn.wantedcqrs.product.repository.dto.ProductSummaryProjection;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -96,4 +102,24 @@ public class ProductService {
 
         productImageRepository.saveAll(productImages);
     }
+
+    @Transactional(readOnly = true)
+    public Page<ProductSummaryProjection> getProductSummaryPage(ProductQueryCondition condition, Pageable pageable) {
+
+        return productRepository.findProductSummaryPage(condition, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Long, ProductImageDto> getPrimaryProductImageMapBy(List<Long> productIds) {
+        List<ProductImage> primaryProductImages = productImageRepository.findAllByProductIdsAndIsPrimary(productIds);
+
+        return primaryProductImages.stream()
+                .map(ProductImageDto::fromEntity)
+                .collect(Collectors.toMap(
+                        ProductImageDto::getProductId,
+                        Function.identity(),
+                        (existing, replacement) -> existing
+                ));
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.pawn.wantedcqrs.product.dto;
 
-import com.pawn.wantedcqrs.product.entity.Product;
 import com.pawn.wantedcqrs.product.entity.ProductDetail;
 import lombok.Data;
 

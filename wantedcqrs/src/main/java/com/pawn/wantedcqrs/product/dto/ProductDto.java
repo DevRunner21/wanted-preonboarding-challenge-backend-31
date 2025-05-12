@@ -38,15 +38,6 @@ public class ProductDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updatedAt;
 
-
-//    private List<CategoryDto> categories;
-//
-//    private List<OptionGroupDto> optionGroups;
-//
-//    private List<ProductImageDto> images;
-//
-//    private List<TagDto> tags;
-
     public Product toEntity(ProductDetailDto detail, ProductPriceDto price) {
         return Product.builder()
                 .id(id)
