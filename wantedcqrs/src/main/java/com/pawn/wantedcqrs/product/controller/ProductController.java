@@ -3,12 +3,11 @@ package com.pawn.wantedcqrs.product.controller;
 import com.pawn.wantedcqrs.common.dto.response.CommonApiResponse;
 import com.pawn.wantedcqrs.common.dto.response.CustomPageResponse;
 import com.pawn.wantedcqrs.common.util.PageableCreator;
-import com.pawn.wantedcqrs.product.dto.CreateProductRequest;
-import com.pawn.wantedcqrs.product.dto.CreateProductResponse;
-import com.pawn.wantedcqrs.product.dto.ProductQueryCondition;
-import com.pawn.wantedcqrs.product.dto.ProductSummaryResult;
+import com.pawn.wantedcqrs.product.dto.*;
+import com.pawn.wantedcqrs.product.entity.ProductDetail;
 import com.pawn.wantedcqrs.product.entity.ProductStatus;
 import com.pawn.wantedcqrs.product.service.ProductFacade;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +47,6 @@ public class ProductController {
             @RequestParam(name = "inStock", required = false) Boolean inStock,
             @RequestParam(name = "search", required = false) String search
     ) {
-
         ProductQueryCondition productQueryFilter = ProductQueryCondition.builder()
                 .status(status)
                 .minPrice(minPrice)
@@ -67,4 +65,13 @@ public class ProductController {
         return ResponseEntity.ok()
                 .body(CommonApiResponse.ok(CustomPageResponse.of(productSummaryPage)));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommonApiResponse<ProductDetailResponse>> readProductDetail(@Positive @PathVariable("id") Long productId){
+        ProductDetailResponse detail = productFacade.getProductDetail(productId);
+
+        return ResponseEntity.ok()
+                .body(CommonApiResponse.ok(detail));
+    };
+
 }

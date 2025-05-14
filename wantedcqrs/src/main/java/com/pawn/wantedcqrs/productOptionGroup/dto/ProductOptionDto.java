@@ -4,6 +4,9 @@ import com.pawn.wantedcqrs.productOptionGroup.entity.ProductOption;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class ProductOptionDto {
@@ -47,6 +50,13 @@ public class ProductOptionDto {
         dto.setDisplayOrder(option.getDisplayOrder());
 
         return dto;
+    }
+
+    public static List<ProductOptionDto> fromEntities(List<ProductOption> options) {
+        if (options == null) return Collections.emptyList();
+        return options.stream()
+                .map(ProductOptionDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
 }

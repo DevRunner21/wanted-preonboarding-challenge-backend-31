@@ -17,19 +17,23 @@ public class ProductTag {
     @Column(name = "id")
     private Long id;
 
-    //    product_id: 상품 ID (FK)
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private Product product;
 
     //    tag_id: 태그 ID (FK)
     @Column(name = "tag_id", nullable = false)
     private Long tagId;
 
     @Builder
-    protected ProductTag(Long id, Long productId, Long tagId) {
+    private ProductTag(Long id, Product product, Long tagId) {
         this.id = id;
-        this.productId = productId;
+        this.product = product;
         this.tagId = tagId;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

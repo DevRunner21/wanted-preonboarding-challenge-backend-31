@@ -1,15 +1,14 @@
 package com.pawn.wantedcqrs.product.service;
 
 import com.pawn.wantedcqrs.common.exception.e4xx.ConflictException;
+import com.pawn.wantedcqrs.common.exception.e4xx.ResourceNotFoundException;
 import com.pawn.wantedcqrs.product.dto.*;
 import com.pawn.wantedcqrs.product.entity.Product;
 import com.pawn.wantedcqrs.product.entity.ProductCategory;
 import com.pawn.wantedcqrs.product.entity.ProductImage;
 import com.pawn.wantedcqrs.product.entity.ProductTag;
-import com.pawn.wantedcqrs.product.repository.ProductCategoryRepository;
 import com.pawn.wantedcqrs.product.repository.ProductImageRepository;
 import com.pawn.wantedcqrs.product.repository.ProductRepository;
-import com.pawn.wantedcqrs.product.repository.ProductTagRepository;
 import com.pawn.wantedcqrs.product.repository.dto.ProductSummaryProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,14 +28,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    private final ProductCategoryRepository productCategoryRepository;
-
-    private final ProductTagRepository productTagRepository;
-
     private final ProductImageRepository productImageRepository;
 
     @Transactional
-    public ProductDto create(ProductDto productParam) {
+    public ProductDto create(ProductDto productParam
+            , List<ProductCategoryDto> productCategoryDtos
+            , List<ProductTagDto> productTagDtos
+            , List<ProductImageDto> productImageDtos
+    ) {
 
         // Product 저장
         checkDupSlug(productParam.getSlug());
@@ -51,7 +50,46 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(newProduct);
 
+        // 카테고리 추가
+        addCategories(productCategoryDtos, savedProduct);
+
+        // 태그 추가
+        addTags(productTagDtos, savedProduct);
+
+        // 이미지 추가
+        addImages(productImageDtos, savedProduct);
+
         return ProductDto.fromEntity(savedProduct);
+    }
+
+
+    private void addCategories(List<ProductCategoryDto> productCategoryDtos, Product savedProduct) {
+        List<ProductCategory> productCategories = productCategoryDtos.stream().map(dto -> ProductCategory.builder()
+                .product(savedProduct)
+                .categoryId(dto.getCategoryId())
+                .isPrimary(dto.isPrimary())
+                .build()).toList();
+        productCategories.forEach(savedProduct::addCategory);
+    }
+
+    private void addTags(List<ProductTagDto> productTagDtos, Product savedProduct) {
+        List<ProductTag> tags = productTagDtos.stream().map(dto -> ProductTag.builder()
+                .product(savedProduct) // 전달된 productId 사용
+                .tagId(dto.getTagId())
+                .build()).toList();
+        tags.forEach(savedProduct::addTag);
+    }
+
+    private void addImages(List<ProductImageDto> productImageDtos, Product savedProduct) {
+        List<ProductImage> productImages = productImageDtos.stream().map(dto -> ProductImage.builder()
+                .product(savedProduct)
+                .isPrimary(dto.isPrimary())
+                .url(dto.getUrl())
+                .altText(dto.getAltText())
+                .displayOrder(dto.getDisplayOrder())
+                .optionId(dto.getOptionId())
+                .build()).toList();
+        productImages.forEach(savedProduct::addImage);
     }
 
     private void checkDupSlug(String slug) {
@@ -59,48 +97,6 @@ public class ProductService {
         if (isDupProduct) {
             throw ConflictException.PRODUCT_SLUG_DUP.getResponseException();
         }
-    }
-
-    @Transactional
-    public void saveCategoriesByProductId(Long productId, List<ProductCategoryDto> productCategoryDtos) {
-//        List<ProductCategory> productCategories = productCategoryDtos.stream().map(ProductCategoryDto::toEntity).toList();
-        List<ProductCategory> productCategories = productCategoryDtos.stream()
-                .map(dto -> ProductCategory.builder()
-                        .productId(productId) // 전달된 productId 사용
-                        .categoryId(dto.getCategoryId())
-                        .isPrimary(dto.isPrimary())
-                        .build())
-                .toList();
-
-        productCategoryRepository.saveAll(productCategories);
-    }
-
-    @Transactional
-    public void saveTagsByProductId(Long productId, List<ProductTagDto> productTagDtos) {
-//        List<ProductTag> productTags = productTagDtos.stream().map(ProductTagDto::toEntity).toList();
-        List<ProductTag> productTags = productTagDtos.stream()
-                .map(dto -> ProductTag.builder()
-                        .productId(productId) // 전달된 productId 사용
-                        .tagId(dto.getTagId())
-                        .build())
-                .toList();
-
-        productTagRepository.saveAll(productTags);
-    }
-
-    @Transactional
-    public void saveImagesByProductId(Long productId, List<ProductImageDto> productImageDtos) {
-        List<ProductImage> productImages = productImageDtos.stream()
-                .map(dto -> ProductImage.builder()
-                        .productId(productId)
-                        .isPrimary(dto.isPrimary())
-                        .url(dto.getUrl())
-                        .altText(dto.getAltText())
-                        .displayOrder(dto.getDisplayOrder())
-                        .optionId(dto.getOptionId())
-                        .build()).toList();
-
-        productImageRepository.saveAll(productImages);
     }
 
     @Transactional(readOnly = true)
@@ -120,6 +116,12 @@ public class ProductService {
                         Function.identity(),
                         (existing, replacement) -> existing
                 ));
+    }
+
+    public ProductDto getProductBy(Long productId) {
+        Product foundProduct = productRepository.findById(productId).orElseThrow(ResourceNotFoundException.PRODUCT::getResponseException);
+
+        return ProductDto.fromEntity(foundProduct);
     }
 
 }

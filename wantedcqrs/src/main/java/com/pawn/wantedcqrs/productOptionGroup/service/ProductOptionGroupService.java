@@ -49,4 +49,12 @@ public class ProductOptionGroupService {
                 ));
     }
 
+    public List<ProductOptionGroupDto> getOptionGroupsBy(Long productId) {
+        List<ProductOptionGroup> foundProductOptionGroups = productOptionGroupRepository.findProductOptionGroupsByProductId((productId));
+
+        return foundProductOptionGroups.stream()
+                .map(ProductOptionGroupDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }

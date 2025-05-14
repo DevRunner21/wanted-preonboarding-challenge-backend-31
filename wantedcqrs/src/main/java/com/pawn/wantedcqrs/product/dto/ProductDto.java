@@ -1,13 +1,13 @@
 package com.pawn.wantedcqrs.product.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pawn.wantedcqrs.product.entity.Product;
-import com.pawn.wantedcqrs.product.entity.ProductDetail;
-import com.pawn.wantedcqrs.product.entity.ProductPrice;
-import com.pawn.wantedcqrs.product.entity.ProductStatus;
+import com.pawn.wantedcqrs.product.entity.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class ProductDto {
@@ -31,6 +31,12 @@ public class ProductDto {
     private ProductDetailDto detail;
 
     private ProductPriceDto price;
+
+    private List<Long> categoryIds = new ArrayList<>();
+
+    private List<Long> tagIds = new ArrayList<>();
+
+    private List<ProductImageDto> images = new ArrayList<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
@@ -83,6 +89,8 @@ public class ProductDto {
         priceDto.setCurrency(price.getCurrency());
         priceDto.setTaxRate(price.getTaxRate());
 
+        List<ProductImageDto> productImageDtos = product.getImages().stream().map(ProductImageDto::fromEntity).toList();
+
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());
         dto.setName(product.getName());
@@ -96,6 +104,9 @@ public class ProductDto {
         dto.setPrice(priceDto);
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
+        dto.setCategoryIds(product.getCategories().stream().map(ProductCategory::getId).collect(Collectors.toList()));
+        dto.setTagIds(product.getTags().stream().map(ProductTag::getId).collect(Collectors.toList()));
+        dto.setImages(productImageDtos);
 
         return dto;
     }

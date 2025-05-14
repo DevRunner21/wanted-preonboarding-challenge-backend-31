@@ -97,7 +97,7 @@ public class QProductRepositoryCustomImpl implements QProductRepositoryCustom {
     private static void applyProductQueryCondition(JPAQuery<?> query, ProductQueryCondition condition) {
         // categoryIds 조건 체크
         if (!CollectionUtils.isEmpty(condition.getCategoryIds())) {
-            query.join(productCategory).on(productCategory.productId.eq(product.id)).fetchJoin()
+            query.join(productCategory).on(productCategory.product.id.eq(product.id)).fetchJoin()
                     .where(productCategory.categoryId.in(condition.getCategoryIds()));
         }
 

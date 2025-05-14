@@ -2,6 +2,7 @@ package com.pawn.wantedcqrs.review.service;
 
 import com.pawn.wantedcqrs.review.dto.ReviewStatsProjection;
 import com.pawn.wantedcqrs.review.repository.ReviewRepository;
+import com.pawn.wantedcqrs.review.repository.dto.ReviewDistributionProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,10 @@ public class ReviewService {
                         Function.identity(),
                         (existing, replacement) -> existing
                 ));
+    }
+
+    public ReviewDistributionProjection findDistributionBy(Long productId) {
+        return reviewRepository.findDistributionBy(productId);
     }
 
 }

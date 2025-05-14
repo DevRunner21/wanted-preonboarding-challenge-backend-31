@@ -29,10 +29,6 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-    //    parent_id: 상위 카테고리 ID (FK, 자기참조)
-    @Column(name = "parent_id")
-    private Long parentId; // TODO: 효율적인 방법 찾기
-
     //    level: 카테고리 레벨 (1: 대분류, 2: 중분류, 3: 소분류)
     @Column(name = "level")
     private Integer level; // TODO: ENUM으로 만들기
@@ -41,15 +37,19 @@ public class Category {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Category parent;
+
     @Builder
-    public Category(Long id, String name, String slug, String description, Long parentId, Integer level, String imageUrl) {
+    private Category(Long id, String name, String slug, String description, Integer level, String imageUrl, Category parent) {
         this.id = id;
         this.name = name;
         this.slug = slug;
         this.description = description;
-        this.parentId = parentId;
         this.level = level;
         this.imageUrl = imageUrl;
+        this.parent = parent;
     }
 
 }

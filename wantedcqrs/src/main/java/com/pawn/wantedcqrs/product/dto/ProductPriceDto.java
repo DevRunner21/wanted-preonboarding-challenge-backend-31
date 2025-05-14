@@ -5,6 +5,7 @@ import com.pawn.wantedcqrs.product.entity.ProductPrice;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Data
 public class ProductPriceDto {
@@ -33,6 +34,14 @@ public class ProductPriceDto {
                 .currency(currency)
                 .taxRate(taxRate)
                 .build();
+    }
+
+    public Integer getDiscountPercentage() {
+        return basePrice.subtract(salePrice)
+                .divide(basePrice, 2, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(2, RoundingMode.HALF_UP)
+                .intValue();
     }
 
 }

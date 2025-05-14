@@ -27,7 +27,7 @@ public class ProductImageDto {
         dto.setAltText(entity.getAltText());
         dto.setPrimary(entity.getIsPrimary());
         dto.setDisplayOrder(entity.getDisplayOrder());
-        dto.setProductId(entity.getProductId());
+        dto.setProductId(entity.getProduct().getId());
         dto.setOptionId(entity.getOptionId());
         return dto;
     }

@@ -17,12 +17,10 @@ public class ProductCategory {
     @Column(name = "id")
     private Long id;
 
-    //    product_id: 상품 ID (FK)
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private Product product;
 
-    //    category_id: 카테고리 ID (FK)
-    @Column(name = "category_id", nullable = false)
     private Long categoryId;
 
     //    is_primary: 주요 카테고리 여부
@@ -30,11 +28,15 @@ public class ProductCategory {
     private boolean isPrimary = false;
 
     @Builder
-    protected ProductCategory(Long id, Long productId, Long categoryId, boolean isPrimary) {
+    private ProductCategory(Long id, Product product, Long categoryId, boolean isPrimary) {
         this.id = id;
-        this.productId = productId;
+        this.product = product;
         this.categoryId = categoryId;
         this.isPrimary = isPrimary;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

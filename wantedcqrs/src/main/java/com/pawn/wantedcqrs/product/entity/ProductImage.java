@@ -33,23 +33,27 @@ public class ProductImage {
     @Column(name = "display_order", nullable = false)
     private Integer displayOrder;
 
-    //    product_id: 상품 ID (FK)
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private Product product;
 
     //    option_id: 연관된 옵션 ID (FK, nullable)
     @Column(name = "option_id", nullable = false)
     private Long optionId;
 
     @Builder
-    protected ProductImage(Long id, String url, String altText, Boolean isPrimary, Integer displayOrder, Long productId, Long optionId) {
+    private ProductImage(Long id, String url, String altText, Boolean isPrimary, Integer displayOrder, Product product, Long optionId) {
         this.id = id;
         this.url = url;
         this.altText = altText;
         this.isPrimary = isPrimary;
         this.displayOrder = displayOrder;
-        this.productId = productId;
+        this.product = product;
         this.optionId = optionId;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

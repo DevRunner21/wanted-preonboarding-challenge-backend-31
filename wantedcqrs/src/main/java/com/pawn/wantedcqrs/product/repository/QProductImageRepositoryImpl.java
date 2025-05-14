@@ -21,7 +21,7 @@ public class QProductImageRepositoryImpl implements QProductImageRepository {
         return qf.selectFrom(productImage)
                 .where(
                         productImage.isPrimary.eq(true),
-                        productImage.productId.in(productIds)
+                        productImage.product.id.in(productIds)
                 )
                 .fetch();
     }

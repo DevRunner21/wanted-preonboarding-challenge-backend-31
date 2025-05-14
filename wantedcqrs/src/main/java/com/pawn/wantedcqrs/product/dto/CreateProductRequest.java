@@ -329,11 +329,11 @@ public class CreateProductRequest {
                 .collect(Collectors.toList());
     }
 
-    public List<ProductCategoryDto> toProductCategoryDtos(Long productId) {
+    public List<ProductCategoryDto> toProductCategoryDtos() {
         return this.categories.stream()
                 .map(category -> {
                     ProductCategoryDto dto = new ProductCategoryDto();
-                    dto.setProductId(productId);
+//                    dto.setProductId(productId);
                     dto.setCategoryId(category.getCategoryId());
                     dto.setPrimary(category.isPrimary());
                     return dto;
@@ -341,11 +341,11 @@ public class CreateProductRequest {
                 .collect(Collectors.toList());
     }
 
-    public List<ProductTagDto> toProductTagDtos(Long productId) {
+    public List<ProductTagDto> toProductTagDtos() {
         return this.tags.stream()
                 .map(tagId -> {
                     ProductTagDto dto = new ProductTagDto();
-                    dto.setProductId(productId);
+//                    dto.setProductId(productId);
                     dto.setTagId(tagId);
                     return dto;
                 })
@@ -353,10 +353,10 @@ public class CreateProductRequest {
     }
 
 
-    public List<ProductImageDto> toProductImageDtos(Long productId) {
+    public List<ProductImageDto> toProductImageDtos() {
         return this.images.stream().map(image -> {
             ProductImageDto dto = new ProductImageDto();
-            dto.setProductId(productId);
+//            dto.setProductId(productId);
             dto.setPrimary(image.isPrimary());
             dto.setUrl(image.getUrl());
             dto.setAltText(image.getAltText());

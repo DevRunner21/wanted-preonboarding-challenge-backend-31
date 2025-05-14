@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -55,6 +57,16 @@ public class Product extends AbstractDateTimeEntity {
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, optional = false)
     private ProductPrice productPrice;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductCategory> categories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductTag> tags = new ArrayList<>();
+
+
     private Product(Long id, String name, String slug, String shortDescription, String fullDescription, Long sellerId, Long brandId, ProductStatus status) {
         this.id = id;
         this.name = name;
@@ -85,6 +97,48 @@ public class Product extends AbstractDateTimeEntity {
             productPrice.setProduct(this);
         }
         this.productPrice = productPrice;
+    }
+
+    public void addCategory(ProductCategory productCategory) {
+        if (Objects.nonNull(productCategory)) {
+            productCategory.setProduct(this);
+        }
+        categories.add(productCategory);
+    }
+
+    public void removeCategory(ProductCategory productCategory) {
+        if (Objects.nonNull(productCategory)) {
+            productCategory.setProduct(null);
+        }
+        categories.remove(productCategory);
+    }
+
+    public void addTag(ProductTag productTag) {
+        if (Objects.nonNull(productTag)) {
+            productTag.setProduct(this);
+        }
+        tags.add(productTag);
+    }
+
+    public void removeTag(ProductTag productTag) {
+        if (Objects.nonNull(productTag)) {
+            productTag.setProduct(null);
+        }
+        tags.remove(productTag);
+    }
+
+    public void addImage(ProductImage productImage) {
+        if (Objects.nonNull(productImage)) {
+            productImage.setProduct(this);
+        }
+        images.add(productImage);
+    }
+
+    public void removeImage(ProductImage productImage) {
+        if (Objects.nonNull(productImage)) {
+            productImage.setProduct(null);
+        }
+        categories.remove(productImage);
     }
 
 }
