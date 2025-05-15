@@ -52,14 +52,30 @@ public class ProductFacade {
         List<ProductImageDto> productImageDtos = request.toProductImageDtos();
 
         // Product, ProductCategory, ProductTag, ProductImage 등록
-        // TODO: Validation Check
         // Brand Validation Check
+        BrandDto requestedBrand = brandService.getBrandBy(productDto.getBrandId());
+
         // Seller Validation Check
-        // Category Validation Check
-        // Tag Validation Check
+        SellerDto requestedSeller = sellerService.getSellerBy(productDto.getSellerId());
+
+        // Category 존재여부 확인
+        List<Long> requestedCategoryIds = productCategoryDtos.stream().map(ProductCategoryDto::getCategoryId).toList();
+        List<CategoryDto> foundCategories = categoryService.getCategoriesBy(requestedCategoryIds);
+        if(requestedCategoryIds.size() != foundCategories.size()) {
+            throw ResourceNotFoundException.CATEGORY.getResponseException();
+        }
+
+        // Tag 존재여부 확인
+        List<Long> requestedTagIds = productTagDtos.stream().map(ProductTagDto::getTagId).toList();
+        List<TagDto> foundTags = tagService.getTagsBy(requestedTagIds);
+        if (requestedTagIds.size() != foundTags.size()) {
+            throw ResourceNotFoundException.TAG.getResponseException();
+        }
+
+        // 상품 등록
         ProductDto savedProductDto = productService.create(productDto, productCategoryDtos, productTagDtos, productImageDtos);
 
-        // ProductOptionGroup 저장
+        // ProductOptionGroup 등록
         List<ProductOptionGroupDto> productOptionGroups =
                 productOptionGroupService.createProductOptionGroupsByProductId(
                         savedProductDto.getId(), request.toOptionGroupDtos()
