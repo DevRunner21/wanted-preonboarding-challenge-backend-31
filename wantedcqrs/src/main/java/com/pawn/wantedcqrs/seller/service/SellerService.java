@@ -17,7 +17,7 @@ public class SellerService {
 
     @Transactional(readOnly = true)
     public SellerDto getSellerBy(Long sellerId) {
-        Seller foundSeller = sellerRepository.findById(sellerId).orElseThrow(ResourceNotFoundException.Seller::getResponseException);
+        Seller foundSeller = sellerRepository.findById(sellerId).orElseThrow(ResourceNotFoundException.SELLER::getResponseException);
 
         return SellerDto.fromEntity(foundSeller);
     }

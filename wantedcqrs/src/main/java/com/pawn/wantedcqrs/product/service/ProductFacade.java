@@ -4,6 +4,7 @@ import com.pawn.wantedcqrs.brand.dto.BrandDto;
 import com.pawn.wantedcqrs.brand.service.BrandService;
 import com.pawn.wantedcqrs.category.dto.CategoryDto;
 import com.pawn.wantedcqrs.category.service.CategoryService;
+import com.pawn.wantedcqrs.common.exception.e4xx.ResourceNotFoundException;
 import com.pawn.wantedcqrs.product.dto.*;
 import com.pawn.wantedcqrs.product.repository.dto.ProductSummaryProjection;
 import com.pawn.wantedcqrs.productOptionGroup.dto.ProductOptionGroupDto;
@@ -142,5 +143,38 @@ public class ProductFacade {
         );
     }
 
+
+    @Transactional
+    public UpdateProductResponse updateProduct(Long productId, UpdateProductRequest request) {
+
+        // Request 분해
+        ProductDto productDto = request.toProductDto();
+        List<ProductCategoryDto> productCategoryDtos = request.toProductCategoryDtos();
+        List<ProductTagDto> productTagDtos = request.toProductTagDtos();
+
+        // Category 존재여부 확인
+        List<Long> requestedCategoryIds = productCategoryDtos.stream().map(ProductCategoryDto::getCategoryId).toList();
+        List<CategoryDto> foundCategories = categoryService.getCategoriesBy(requestedCategoryIds);
+        if(requestedCategoryIds.size() != foundCategories.size()) {
+            throw ResourceNotFoundException.CATEGORY.getResponseException();
+        }
+
+        // Tag 존재여부 확인
+        List<Long> requestedTagIds = productTagDtos.stream().map(ProductTagDto::getTagId).toList();
+        List<TagDto> foundTags = tagService.getTagsBy(requestedTagIds);
+        if (requestedTagIds.size() != foundTags.size()) {
+            throw ResourceNotFoundException.TAG.getResponseException();
+        }
+
+        ProductDto updatedProduct = productService.updateProduct(productId, productDto, productCategoryDtos, productTagDtos);
+
+        return UpdateProductResponse.builder()
+                .id(updatedProduct.getId())
+                .slug(updatedProduct.getSlug())
+                .name(updatedProduct.getName())
+                .createdAt(updatedProduct.getCreatedAt())
+                .updatedAt(updatedProduct.getUpdatedAt())
+                .build();
+    }
 
 }

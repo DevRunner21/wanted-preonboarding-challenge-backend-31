@@ -8,9 +8,10 @@ public enum ResourceNotFoundException implements ResponseDefinition {
 
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 리소스를 찾을 수 없음")
     , PRODUCT(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 상품을 찾을 수 없음")
-    , Seller(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 Seller를 찾을 수 없음")
-    , Brand(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 Brand를 찾을 수 없음")
-    ;
+    , SELLER(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 Seller를 찾을 수 없음")
+    , BRAND(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 Brand를 찾을 수 없음")
+    , CATEGORY(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 Category를 찾을 수 없음")
+    , TAG(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 TAG를 찾을 수 없음");
 
     private final ResponseException responseException;
 

@@ -18,7 +18,7 @@ public class BrandService {
 
     @Transactional(readOnly = true)
     public BrandDto getBrandBy(Long brandId) {
-        Brand foundBrand = brandRepository.findById(brandId).orElseThrow(ResourceNotFoundException.Brand::getResponseException);
+        Brand foundBrand = brandRepository.findById(brandId).orElseThrow(ResourceNotFoundException.BRAND::getResponseException);
 
         return BrandDto.fromEntity(foundBrand);
     }

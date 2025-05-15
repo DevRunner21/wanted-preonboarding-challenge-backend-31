@@ -1,5 +1,7 @@
 package com.pawn.wantedcqrs.product.entity;
 
+import com.pawn.wantedcqrs.product.dto.ProductDto;
+import com.pawn.wantedcqrs.product.dto.ProductPriceDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -63,6 +65,23 @@ public class ProductPrice {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public ProductPrice updateProductPrice(ProductPriceDto updateInfo) {
+        if (updateInfo.getBasePrice() != null) {
+            this.basePrice = updateInfo.getBasePrice();
+        }
+        if (updateInfo.getSalePrice() != null) {
+            this.salePrice = updateInfo.getSalePrice();
+        }
+        if (updateInfo.getCurrency() != null) {
+            this.currency = updateInfo.getCurrency();
+        }
+        if (updateInfo.getTaxRate() != null) {
+            this.taxRate = updateInfo.getTaxRate();
+        }
+
+        return this;
     }
 
 }

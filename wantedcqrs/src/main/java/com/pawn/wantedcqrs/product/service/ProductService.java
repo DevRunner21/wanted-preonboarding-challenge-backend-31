@@ -124,4 +124,36 @@ public class ProductService {
         return ProductDto.fromEntity(foundProduct);
     }
 
+    @Transactional
+    public ProductDto updateProduct(Long productId, ProductDto productDto, List<ProductCategoryDto> productCategoryDtos, List<ProductTagDto> productTagDtos) {
+        Product foundProduct = productRepository.findById(productId)
+                .orElseThrow(ResourceNotFoundException.PRODUCT::getResponseException);
+
+        foundProduct.updateProduct(productDto);
+        foundProduct.getProductDetail().updateProductDetail(productDto.getDetail());
+        foundProduct.getProductPrice().updateProductPrice(productDto.getPrice());
+
+        // 카테고리 수정
+        List<ProductCategory> newProductCategories = productCategoryDtos.stream().map(productCategoryDto -> ProductCategory.builder()
+                .product(foundProduct)
+                .id(productCategoryDto.getId())
+                .categoryId(productCategoryDto.getCategoryId())
+                .isPrimary(productCategoryDto.isPrimary())
+                .build()).toList();
+        foundProduct.getCategories().clear();
+        foundProduct.getCategories().addAll(newProductCategories);
+
+        // 태그 수정
+        List<ProductTag> newProductTags = productTagDtos.stream().map(productTagDto -> ProductTag.builder()
+                .id(productTagDto.getId())
+                .product(foundProduct)
+                .tagId(productTagDto.getTagId())
+                .build()).toList();
+        foundProduct.getTags().clear();
+        foundProduct.getTags().addAll(newProductTags);
+
+        return ProductDto.fromEntity(foundProduct);
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.pawn.wantedcqrs.product.entity;
 
 import com.pawn.wantedcqrs.common.domain.AbstractDateTimeEntity;
+import com.pawn.wantedcqrs.product.dto.ProductDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -139,6 +140,27 @@ public class Product extends AbstractDateTimeEntity {
             productImage.setProduct(null);
         }
         categories.remove(productImage);
+    }
+
+
+    public Product updateProduct(ProductDto updateInfo) {
+        if (updateInfo.getName() != null) {
+            this.name = updateInfo.getName();
+        }
+        if (updateInfo.getSlug() != null) {
+            this.slug = updateInfo.getSlug();
+        }
+        if (updateInfo.getShortDescription() != null) {
+            this.shortDescription = updateInfo.getShortDescription();
+        }
+        if (updateInfo.getFullDescription() != null) {
+            this.fullDescription = updateInfo.getFullDescription();
+        }
+        if (updateInfo.getStatus() != null) {
+            this.status = updateInfo.getStatus();
+        }
+
+        return this;
     }
 
 }

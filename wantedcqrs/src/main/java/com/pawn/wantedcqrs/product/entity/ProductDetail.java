@@ -1,6 +1,8 @@
 package com.pawn.wantedcqrs.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pawn.wantedcqrs.product.dto.ProductDetailDto;
+import com.pawn.wantedcqrs.product.dto.ProductDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -123,6 +125,35 @@ public class ProductDetail {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+
+    public ProductDetail updateProductDetail(ProductDetailDto updateInfo) {
+        if (updateInfo.getWeight() != null) {
+            this.weight = updateInfo.getWeight();
+        }
+        if (updateInfo.getDimensions() != null) {
+            this.dimensions.depth = updateInfo.getDimensions().getDepth();
+            this.dimensions.height = updateInfo.getDimensions().getHeight();
+            this.dimensions.width = updateInfo.getDimensions().getWidth();
+        }
+        if (updateInfo.getMaterials() != null) {
+            this.materials = updateInfo.getMaterials();
+        }
+        if (updateInfo.getCountryOfOrigin() != null) {
+            this.countryOfOrigin = updateInfo.getCountryOfOrigin();
+        }
+        if (updateInfo.getWarrantyInfo() != null) {
+            this.warrantyInfo = updateInfo.getWarrantyInfo();
+        }
+        if (updateInfo.getCareInstructions() != null) {
+            this.careInstructions = updateInfo.getCareInstructions();
+        }
+        if (updateInfo.getAdditionalInfo() != null) {
+            this.additionalInfo.assemblyRequired = updateInfo.getAdditionalInfo().isAssemblyRequired();
+            this.additionalInfo.assemblyTime = updateInfo.getAdditionalInfo().getAssemblyTime();
+        }
+        return this;
     }
 
 }

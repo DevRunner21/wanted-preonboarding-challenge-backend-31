@@ -67,11 +67,23 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommonApiResponse<ProductDetailResponse>> readProductDetail(@Positive @PathVariable("id") Long productId){
+    public ResponseEntity<CommonApiResponse<ProductDetailResponse>> readProductDetail(@Positive @PathVariable("id") Long productId) {
         ProductDetailResponse detail = productFacade.getProductDetail(productId);
 
         return ResponseEntity.ok()
                 .body(CommonApiResponse.ok(detail));
-    };
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CommonApiResponse<UpdateProductResponse>> update(
+            @Positive @PathVariable("id") Long productId
+            , @RequestBody UpdateProductRequest request) {
+
+        UpdateProductResponse response = productFacade.updateProduct(productId, request);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonApiResponse.ok(response));
+    }
+
 
 }
