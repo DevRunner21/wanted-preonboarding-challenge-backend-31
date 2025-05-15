@@ -12,6 +12,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -57,9 +58,9 @@ public class ProductDetail {
     //    additional_info: 추가 정보 (JSONB)
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "additional_info", columnDefinition = "jsonb")
-    private AdditionalInfo additionalInfo;
+    private Map<String, Object> additionalInfo;
 
-    private ProductDetail(Long id, BigDecimal weight, Dimensions dimensions, String materials, String countryOfOrigin, String warrantyInfo, String careInstructions, AdditionalInfo additionalInfo) {
+    private ProductDetail(Long id, BigDecimal weight, Dimensions dimensions, String materials, String countryOfOrigin, String warrantyInfo, String careInstructions, Map<String, Object> additionalInfo) {
         this.id = id;
         this.weight = weight;
         this.dimensions = dimensions;
@@ -71,7 +72,7 @@ public class ProductDetail {
     }
 
     @Builder
-    protected ProductDetail(Long id, Product product, BigDecimal weight, Dimensions dimensions, String materials, String countryOfOrigin, String warrantyInfo, String careInstructions, AdditionalInfo additionalInfo) {
+    protected ProductDetail(Long id, Product product, BigDecimal weight, Dimensions dimensions, String materials, String countryOfOrigin, String warrantyInfo, String careInstructions, Map<String, Object> additionalInfo) {
         this(id, weight, dimensions, materials, countryOfOrigin, warrantyInfo, careInstructions, additionalInfo);
         this.setProduct(product);
     }
@@ -150,8 +151,7 @@ public class ProductDetail {
             this.careInstructions = updateInfo.getCareInstructions();
         }
         if (updateInfo.getAdditionalInfo() != null) {
-            this.additionalInfo.assemblyRequired = updateInfo.getAdditionalInfo().isAssemblyRequired();
-            this.additionalInfo.assemblyTime = updateInfo.getAdditionalInfo().getAssemblyTime();
+            this.additionalInfo = updateInfo.getAdditionalInfo();
         }
         return this;
     }

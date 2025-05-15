@@ -4,7 +4,6 @@ import com.pawn.wantedcqrs.common.dto.response.CommonApiResponse;
 import com.pawn.wantedcqrs.common.dto.response.CustomPageResponse;
 import com.pawn.wantedcqrs.common.util.PageableCreator;
 import com.pawn.wantedcqrs.product.dto.*;
-import com.pawn.wantedcqrs.product.entity.ProductDetail;
 import com.pawn.wantedcqrs.product.entity.ProductStatus;
 import com.pawn.wantedcqrs.product.service.ProductFacade;
 import jakarta.validation.constraints.Positive;

@@ -141,10 +141,7 @@ public class ProductAssembler {
                 .countryOfOrigin(dto.getCountryOfOrigin())
                 .warrantyInfo(dto.getWarrantyInfo())
                 .careInstructions(dto.getCareInstructions())
-                .additionalInfo(ProductDetailResponse.ProductDetail.AdditionalInfo.builder()
-                        .assemblyRequired(dto.getAdditionalInfo().isAssemblyRequired())
-                        .assemblyTime(dto.getAdditionalInfo().getAssemblyTime())
-                        .build())
+                .additionalInfo(dto.getAdditionalInfo())
                 .build();
     }
 

@@ -64,7 +64,7 @@ public class ProductDetailResponse {
         private String countryOfOrigin;
         private String warrantyInfo;
         private String careInstructions;
-        private AdditionalInfo additionalInfo;
+        private Map<String, Object> additionalInfo; // JSON object for additional information
 
         @Getter
         @Builder
@@ -72,13 +72,6 @@ public class ProductDetailResponse {
             private Integer width;
             private Integer height;
             private Integer depth;
-        }
-
-        @Getter
-        @Builder
-        public static class AdditionalInfo {
-            private Boolean assemblyRequired;
-            private String assemblyTime;
         }
     }
 

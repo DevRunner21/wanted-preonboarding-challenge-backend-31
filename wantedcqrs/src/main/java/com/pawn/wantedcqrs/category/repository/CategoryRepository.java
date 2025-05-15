@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findCategoriesByIdIsIn(Collection<Long> ids);
+
+    List<Category> findByLevel(Integer level);
 }

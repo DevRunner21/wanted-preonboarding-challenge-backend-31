@@ -30,6 +30,7 @@ import static com.pawn.wantedcqrs.product.entity.QProductCategory.productCategor
 import static com.pawn.wantedcqrs.product.entity.QProductDetail.productDetail;
 import static com.pawn.wantedcqrs.product.entity.QProductPrice.productPrice;
 import static com.pawn.wantedcqrs.productOptionGroup.entity.QProductOption.productOption;
+import static com.pawn.wantedcqrs.review.entity.QReview.review;
 import static com.pawn.wantedcqrs.seller.entity.QSeller.seller;
 import static java.util.Objects.nonNull;
 
@@ -49,6 +50,46 @@ public class QProductRepositoryCustomImpl implements QProductRepositoryCustom {
         List<ProductSummaryProjection> contents = getContentQuery(productQueryCondition, pageable).fetch();
 
         return new PageImpl<>(contents, pageable, total);
+    }
+
+    @Override
+    public List<Product> findTop5PopularProducts() {
+        return qf.select(product)
+                .from(product)
+                .join(review).on(review.productId.eq(product.id))
+                .where(product.status.eq(ProductStatus.ACTIVE))
+                .groupBy(product)
+                .orderBy(
+                        new OrderSpecifier<>(
+                                Order.DESC,
+                                review.count().multiply(review.rating.avg())
+                        )
+                ).fetch();
+    }
+
+    @Override
+    public List<ProductSummaryProjection> findProductSummariesBy(List<Long> productIds) {
+        return qf.select(new QProductSummaryProjection(
+                        product.id,
+                        product.name,
+                        product.slug,
+                        product.shortDescription,
+                        product.productPrice.basePrice,
+                        product.productPrice.salePrice,
+                        product.productPrice.currency,
+                        brand.id,
+                        brand.name,
+                        seller.id,
+                        seller.name,
+                        product.status,
+                        product.createdAt
+                ))
+                .from(product)
+                .leftJoin(product.productDetail, productDetail)
+                .leftJoin(product.productPrice, productPrice)
+                .leftJoin(brand).on(product.brandId.eq(brand.id))
+                .leftJoin(seller).on(product.sellerId.eq(seller.id))
+                .fetch();
     }
 
     private JPAQuery<ProductSummaryProjection> getContentQuery(ProductQueryCondition condition, Pageable pageable) {
@@ -150,7 +191,6 @@ public class QProductRepositoryCustomImpl implements QProductRepositoryCustom {
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(Sort sort) {
-//        PathBuilder<?> entityPath = new PathBuilder<>((Class<?>) Product.class, "productEntity");
         PathBuilder<Product> entityPath = new PathBuilder<>(Product.class, product.getMetadata());
 
         List<OrderSpecifier<?>> orders = new ArrayList<>();

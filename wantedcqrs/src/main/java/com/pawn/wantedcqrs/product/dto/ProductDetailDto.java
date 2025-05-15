@@ -4,6 +4,8 @@ import com.pawn.wantedcqrs.product.entity.ProductDetail;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class ProductDetailDto {
@@ -24,7 +26,7 @@ public class ProductDetailDto {
 
     private String careInstructions;
 
-    private ProductDetailDto.AdditionalInfo additionalInfo;
+    private Map<String, Object> additionalInfo = new HashMap<>(); // JSON object for additional information
 
     @Data
     public static class Dimensions {
@@ -43,20 +45,6 @@ public class ProductDetailDto {
 
     }
 
-    @Data
-    public static class AdditionalInfo {
-
-        private boolean assemblyRequired;
-
-        private String assemblyTime;
-
-        public AdditionalInfo(boolean assemblyRequired, String assemblyTime) {
-            this.assemblyRequired = assemblyRequired;
-            this.assemblyTime = assemblyTime;
-        }
-
-    }
-
     public ProductDetail toEntity() {
         return ProductDetail.builder()
                 .id(id)
@@ -71,10 +59,7 @@ public class ProductDetailDto {
                 .countryOfOrigin(countryOfOrigin)
                 .warrantyInfo(warrantyInfo)
                 .careInstructions(careInstructions)
-                .additionalInfo(ProductDetail.AdditionalInfo.builder()
-                        .assemblyRequired(additionalInfo.assemblyRequired)
-                        .assemblyTime(additionalInfo.assemblyTime)
-                        .build())
+                .additionalInfo(additionalInfo)
                 .build();
     }
 

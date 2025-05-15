@@ -9,6 +9,7 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -72,11 +73,11 @@ public class UpdateProductRequest {
 
         private final String careInstructions;
 
-        private final AdditionalInfo additionalInfo;
+        private final Map<String, Object> additionalInfo;
 
         @Builder
         public Detail(BigDecimal weight, Dimensions dimensions, String materials, String countryOfOrigin,
-                      String warrantyInfo, String careInstructions, AdditionalInfo additionalInfo) {
+                      String warrantyInfo, String careInstructions, Map<String, Object> additionalInfo) {
             this.weight = weight;
             this.dimensions = dimensions;
             this.materials = materials;
@@ -87,7 +88,7 @@ public class UpdateProductRequest {
         }
 
         public static Detail of(BigDecimal weight, Dimensions dimensions, String materials, String countryOfOrigin,
-                                String warrantyInfo, String careInstructions, AdditionalInfo additionalInfo) {
+                                String warrantyInfo, String careInstructions, Map<String, Object> additionalInfo) {
             return new Detail(weight, dimensions, materials, countryOfOrigin, warrantyInfo, careInstructions, additionalInfo);
         }
     }
@@ -110,24 +111,6 @@ public class UpdateProductRequest {
 
         public static Dimensions of(int width, int height, int depth) {
             return new Dimensions(width, height, depth);
-        }
-    }
-
-    @Getter
-    public static class AdditionalInfo {
-
-        private final boolean assemblyRequired;
-
-        private final String assemblyTime;
-
-        @Builder
-        public AdditionalInfo(boolean assemblyRequired, String assemblyTime) {
-            this.assemblyRequired = assemblyRequired;
-            this.assemblyTime = assemblyTime;
-        }
-
-        public static AdditionalInfo of(boolean assemblyRequired, String assemblyTime) {
-            return new AdditionalInfo(assemblyRequired, assemblyTime);
         }
     }
 
@@ -244,12 +227,7 @@ public class UpdateProductRequest {
                         dimensionParams.getDepth()
                 ));
 
-        var additionalInfoParam = this.getDetail().getAdditionalInfo();
-        detailDto.setAdditionalInfo(
-                new ProductDetailDto.AdditionalInfo(
-                        additionalInfoParam.isAssemblyRequired(),
-                        additionalInfoParam.getAssemblyTime()
-                ));
+        detailDto.setAdditionalInfo(this.getDetail().getAdditionalInfo());
 
         ProductPriceDto priceDto = new ProductPriceDto();
         Price priceParam = this.getPrice();

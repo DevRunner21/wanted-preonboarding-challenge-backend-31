@@ -75,10 +75,7 @@ public class ProductDto {
                 detail.getDimensions().getHeight(),
                 detail.getDimensions().getDepth()
         ));
-        detailDto.setAdditionalInfo(new ProductDetailDto.AdditionalInfo(
-                detail.getAdditionalInfo().isAssemblyRequired(),
-                detail.getAdditionalInfo().getAssemblyTime()
-        ));
+        detailDto.setAdditionalInfo(detail.getAdditionalInfo());
 
         ProductPrice price = product.getProductPrice();
         ProductPriceDto priceDto = new ProductPriceDto();

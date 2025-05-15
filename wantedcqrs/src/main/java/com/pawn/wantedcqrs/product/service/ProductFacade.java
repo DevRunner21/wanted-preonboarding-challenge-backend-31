@@ -61,7 +61,7 @@ public class ProductFacade {
         // Category 존재여부 확인
         List<Long> requestedCategoryIds = productCategoryDtos.stream().map(ProductCategoryDto::getCategoryId).toList();
         List<CategoryDto> foundCategories = categoryService.getCategoriesBy(requestedCategoryIds);
-        if(requestedCategoryIds.size() != foundCategories.size()) {
+        if (requestedCategoryIds.size() != foundCategories.size()) {
             throw ResourceNotFoundException.CATEGORY.getResponseException();
         }
 
@@ -115,6 +115,30 @@ public class ProductFacade {
         );
 
         return new PageImpl<>(results, pageable, productSummaryPage.getTotalElements());
+    }
+
+    public List<ProductSummaryResult> getProductSummaryResultsBy(List<Long> productIds) {
+        if (productIds.isEmpty()) {
+            return List.of();
+        }
+
+        List<ProductSummaryProjection> productSummaries = productService.getProductSummariesBy(productIds);
+
+        // primaryImage
+        Map<Long, ProductImageDto> primaryProductImageMap = productService.getPrimaryProductImageMapBy(productIds);
+
+        // review
+        Map<Long, ReviewStatsProjection> reviewStatsMap = reviewService.getReviewStatsMapBy(productIds);
+
+        // stock
+        Map<Long, ProductStockProjection> productStockMap = productOptionGroupService.getProductStockMapBy(productIds);
+
+        return productAssembler.assemble(
+                productSummaries,
+                primaryProductImageMap,
+                reviewStatsMap,
+                productStockMap
+        );
     }
 
     public ProductDetailResponse getProductDetail(Long productId) {
@@ -171,7 +195,7 @@ public class ProductFacade {
         // Category 존재여부 확인
         List<Long> requestedCategoryIds = productCategoryDtos.stream().map(ProductCategoryDto::getCategoryId).toList();
         List<CategoryDto> foundCategories = categoryService.getCategoriesBy(requestedCategoryIds);
-        if(requestedCategoryIds.size() != foundCategories.size()) {
+        if (requestedCategoryIds.size() != foundCategories.size()) {
             throw ResourceNotFoundException.CATEGORY.getResponseException();
         }
 

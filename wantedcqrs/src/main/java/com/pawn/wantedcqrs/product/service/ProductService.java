@@ -106,6 +106,12 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public List<ProductSummaryProjection> getProductSummariesBy(List<Long> productIds) {
+
+        return productRepository.findProductSummariesBy(productIds);
+    }
+
+    @Transactional(readOnly = true)
     public Map<Long, ProductImageDto> getPrimaryProductImageMapBy(List<Long> productIds) {
         List<ProductImage> primaryProductImages = productImageRepository.findAllByProductIdsAndIsPrimary(productIds);
 
