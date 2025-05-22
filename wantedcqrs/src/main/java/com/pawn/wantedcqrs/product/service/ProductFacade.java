@@ -166,7 +166,7 @@ public class ProductFacade {
         List<ProductImageDto> images = product.getImages();
 
         // 평점 조회
-        ReviewDistributionProjection reviewDistribution = reviewService.findDistributionBy(productId);
+        ReviewDistributionProjection reviewDistribution = reviewService.getDistributionBy(productId);
 
         // TODO: 관련 상품 조회
 

@@ -1,5 +1,6 @@
 package com.pawn.wantedcqrs.review.entity;
 
+import com.pawn.wantedcqrs.common.domain.AbstractDateTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "reviews")
-public class Review {
+public class Review extends AbstractDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +20,11 @@ public class Review {
 
     //    product_id: 상품 ID (FK)
     @Column(name = "product_id", nullable = false)
-    private Long productId; // TODO: 연관관계 파악하기
+    private Long productId;
 
     //    user_id: 사용자 ID (FK)
     @Column(name = "user_id", nullable = false)
-    private Long userId; // / TODO: 연관관계 파악하기
+    private Long userId;
 
     //    rating: 평점 (1-5)
     @Column(name = "rating", nullable = false)
@@ -43,10 +44,10 @@ public class Review {
 
     //    helpful_votes: 도움됨 투표 수
     @Column(name = "helpful_votes")
-    private Integer helpful_votes = 0;
+    private Integer helpfulVotes = 0;
 
     @Builder
-    protected Review(Long id, Long productId, Long userId, Integer rating, String title, String content, Boolean verifiedPurchase, Integer helpful_votes) {
+    protected Review(Long id, Long productId, Long userId, Integer rating, String title, String content, Boolean verifiedPurchase, Integer helpfulVotes) {
         this.id = id;
         this.productId = productId;
         this.userId = userId;
@@ -54,7 +55,7 @@ public class Review {
         this.title = title;
         this.content = content;
         this.verifiedPurchase = verifiedPurchase;
-        this.helpful_votes = helpful_votes;
+        this.helpfulVotes = helpfulVotes;
     }
 
 }
