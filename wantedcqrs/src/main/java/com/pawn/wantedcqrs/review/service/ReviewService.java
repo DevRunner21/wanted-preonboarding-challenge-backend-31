@@ -69,4 +69,16 @@ public class ReviewService {
         return ReviewDto.fromEntity(updatedReview);
     }
 
+    @Transactional
+    public void delete(Long id, Long userId) {
+        Review target = reviewRepository.findById(id).orElseThrow(ResourceNotFoundException.REVIEW::getResponseException);
+
+        // 삭제 권한 체크
+        if(!Objects.equals(userId, target.getUserId())) {
+            throw ForbiddenException.FORBIDDEN.getResponseException();
+        }
+
+        reviewRepository.delete(target);
+    }
+
 }

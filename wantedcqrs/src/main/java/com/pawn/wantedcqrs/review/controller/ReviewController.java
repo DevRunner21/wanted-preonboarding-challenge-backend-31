@@ -4,6 +4,7 @@ import com.pawn.wantedcqrs.common.dto.response.CommonApiResponse;
 import com.pawn.wantedcqrs.common.util.PageableCreator;
 import com.pawn.wantedcqrs.review.dto.*;
 import com.pawn.wantedcqrs.review.service.ReviewFacade;
+import com.pawn.wantedcqrs.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewFacade reviewFacade;
+
+    private final ReviewService reviewService;
 
     @GetMapping("/products/{productId}/reviews")
     public ResponseEntity<CommonApiResponse<ReadReviewsResponse>> readProductReviewPages(
@@ -62,4 +65,12 @@ public class ReviewController {
         return ResponseEntity.ok(CommonApiResponse.ok(response));
     }
 
+    @DeleteMapping("/reviews/{id}")
+    public ResponseEntity<CommonApiResponse> delete(@PathVariable Long id) {
+        Long userId = 1L; // TODO: 인증인가 붙이면서 변경 예정
+
+        reviewService.delete(id, userId);
+
+        return ResponseEntity.ok(CommonApiResponse.ok(null));
+    }
 }
