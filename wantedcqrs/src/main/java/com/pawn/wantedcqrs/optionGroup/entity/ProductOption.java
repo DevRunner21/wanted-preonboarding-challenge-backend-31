@@ -1,5 +1,6 @@
 package com.pawn.wantedcqrs.optionGroup.entity;
 
+import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -57,6 +58,34 @@ public class ProductOption {
 
     public void setOptionGroup(ProductOptionGroup optionGroup) {
         this.optionGroup = optionGroup;
+    }
+
+    public ProductOption update(ProductOptionDto productOptionDto) {
+        if (productOptionDto == null) {
+            return this;
+        }
+
+        if(productOptionDto.getName() != null) {
+            this.name = productOptionDto.getName();
+        }
+
+        if(productOptionDto.getAdditionalPrice() != null) {
+            this.additionalPrice = productOptionDto.getAdditionalPrice();
+        }
+
+        if(productOptionDto.getSku() != null) {
+            this.sku = productOptionDto.getSku();
+        }
+
+        if(productOptionDto.getStock() != null) {
+            this.stock = productOptionDto.getStock();
+        }
+
+        if(productOptionDto.getDisplayOrder() != null) {
+            this.displayOrder = productOptionDto.getDisplayOrder();
+        }
+
+        return this;
     }
 
 }

@@ -3,6 +3,8 @@ package com.pawn.wantedcqrs.optionGroup.controller;
 import com.pawn.wantedcqrs.common.dto.response.CommonApiResponse;
 import com.pawn.wantedcqrs.optionGroup.dto.CreateOptionRequest;
 import com.pawn.wantedcqrs.optionGroup.dto.CreateOptionResponse;
+import com.pawn.wantedcqrs.optionGroup.dto.UpdateOptionRequest;
+import com.pawn.wantedcqrs.optionGroup.dto.UpdateOptionResponse;
 import com.pawn.wantedcqrs.optionGroup.service.ProductOptionGroupFacade;
 import com.pawn.wantedcqrs.optionGroup.service.ProductOptionGroupService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,17 @@ public class ProductOptionGroupController {
         productOptionGroupService.deleteOption(productId, optionId);
 
         return ResponseEntity.ok(CommonApiResponse.ok(null));
+    }
+
+    @PutMapping("/products/{productId}/options/{optionId}")
+    public ResponseEntity<CommonApiResponse<UpdateOptionResponse>> updateOption(
+            @PathVariable Long productId,
+            @PathVariable Long optionId,
+            @RequestBody UpdateOptionRequest request
+    ) {
+        UpdateOptionResponse response = productOptionGroupFacade.updateOption(productId, optionId, request);
+
+        return ResponseEntity.ok(CommonApiResponse.ok(response));
     }
 
 }

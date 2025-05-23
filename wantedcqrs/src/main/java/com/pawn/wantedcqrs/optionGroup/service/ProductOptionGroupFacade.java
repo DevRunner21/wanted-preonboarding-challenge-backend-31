@@ -1,8 +1,6 @@
 package com.pawn.wantedcqrs.optionGroup.service;
 
-import com.pawn.wantedcqrs.optionGroup.dto.CreateOptionRequest;
-import com.pawn.wantedcqrs.optionGroup.dto.CreateOptionResponse;
-import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionDto;
+import com.pawn.wantedcqrs.optionGroup.dto.*;
 import com.pawn.wantedcqrs.product.dto.ProductDto;
 import com.pawn.wantedcqrs.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ public class ProductOptionGroupFacade {
 
     @Transactional
     public CreateOptionResponse createOption(Long productId, CreateOptionRequest request) {
-
         ProductDto foundProduct = productService.getProductBy(productId);
 
         ProductOptionDto newOption = productOptionGroupService.saveOption(foundProduct.getId(), request.toProductOptionDto());
@@ -33,6 +30,24 @@ public class ProductOptionGroupFacade {
                 .additionalPrice(newOption.getAdditionalPrice())
                 .displayOrder(newOption.getDisplayOrder())
                 .stock(newOption.getStock())
+                .build();
+    }
+
+    @Transactional
+    public UpdateOptionResponse updateOption(Long productId, Long optionId, UpdateOptionRequest request) {
+        ProductDto foundProduct = productService.getProductBy(productId);
+        ProductOptionDto productOptionDto = request.toProductOptionDto();
+
+        ProductOptionDto updatedOption = productOptionGroupService.updateOption(foundProduct.getId(), optionId, productOptionDto);
+
+        return UpdateOptionResponse.builder()
+                .id(updatedOption.getId())
+                .optionGroupId(updatedOption.getOptionGroupId())
+                .additionalPrice(updatedOption.getAdditionalPrice())
+                .sku(updatedOption.getSku())
+                .stock(updatedOption.getStock())
+                .displayOrder(updatedOption.getDisplayOrder())
+                .name(updatedOption.getName())
                 .build();
     }
 

@@ -109,4 +109,33 @@ public class ProductOptionGroupService {
         optionGroup.removeOption(target);
     }
 
+    @Transactional
+    public ProductOptionDto updateOption(Long productId, Long optionId, ProductOptionDto productOptionDto) {
+        List<ProductOptionGroup> optionGroups = productOptionGroupRepository.findProductOptionGroupsByProductId((productId));
+
+        Map<Long, ProductOption> optionMap = optionGroups.stream()
+                .flatMap(group -> {
+                    List<ProductOption> options = group.getOptions();
+                    return options == null ? Stream.empty() : options.stream();
+                })
+                .collect(Collectors.toMap(
+                        ProductOption::getId,
+                        Function.identity()
+                ));
+
+        if (!optionMap.containsKey(optionId)) {
+            throw ResourceNotFoundException.OPTION.getResponseException();
+        }
+
+        ProductOption target = optionMap.get(optionId);
+        ProductOptionGroup optionGroup = target.getOptionGroup();
+
+        ProductOption updatedOption = target.update(productOptionDto);
+
+        optionGroup.removeOption(target);
+        optionGroup.addOption(updatedOption);
+
+        return ProductOptionDto.fromEntity(updatedOption);
+    }
+
 }
