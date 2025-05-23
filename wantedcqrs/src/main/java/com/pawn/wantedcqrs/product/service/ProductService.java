@@ -159,7 +159,9 @@ public class ProductService {
         foundProduct.getTags().clear();
         foundProduct.getTags().addAll(newProductTags);
 
-        return ProductDto.fromEntity(foundProduct);
+        Product savedProduct = productRepository.save(foundProduct);
+
+        return ProductDto.fromEntity(savedProduct);
     }
 
 
