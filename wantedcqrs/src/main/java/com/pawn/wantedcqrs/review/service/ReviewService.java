@@ -1,5 +1,7 @@
 package com.pawn.wantedcqrs.review.service;
 
+import com.pawn.wantedcqrs.common.exception.e4xx.ForbiddenException;
+import com.pawn.wantedcqrs.common.exception.e4xx.ResourceNotFoundException;
 import com.pawn.wantedcqrs.review.dto.ReviewDto;
 import com.pawn.wantedcqrs.review.dto.ReviewQueryCondition;
 import com.pawn.wantedcqrs.review.dto.ReviewStatsProjection;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,6 +53,20 @@ public class ReviewService {
         Review savedReview = reviewRepository.save(reviewDto.toEntity());
 
         return ReviewDto.fromEntity(savedReview);
+    }
+
+    @Transactional
+    public ReviewDto update(Long id, ReviewDto reviewDto) {
+        Review origin = reviewRepository.findById(id).orElseThrow(ResourceNotFoundException.REVIEW::getResponseException);
+
+        // 수정 권한 체크
+        if(!Objects.equals(reviewDto.getUserId(), origin.getUserId())) {
+            throw ForbiddenException.FORBIDDEN.getResponseException();
+        }
+
+        Review updatedReview = reviewRepository.save(origin.update(reviewDto));
+
+        return ReviewDto.fromEntity(updatedReview);
     }
 
 }

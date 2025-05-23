@@ -12,7 +12,8 @@ public enum ResourceNotFoundException implements ResponseDefinition {
     , BRAND(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 Brand를 찾을 수 없음")
     , CATEGORY(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 Category를 찾을 수 없음")
     , TAG(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 TAG를 찾을 수 없음")
-    , USER(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 USER를 찾을 수 없음");
+    , USER(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 USER를 찾을 수 없음")
+    , REVIEW(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", "요청한 REVIEW를 찾을 수 없음");
 
     private final ResponseException responseException;
 

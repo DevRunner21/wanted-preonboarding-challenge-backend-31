@@ -2,10 +2,7 @@ package com.pawn.wantedcqrs.review.controller;
 
 import com.pawn.wantedcqrs.common.dto.response.CommonApiResponse;
 import com.pawn.wantedcqrs.common.util.PageableCreator;
-import com.pawn.wantedcqrs.review.dto.CreateReviewRequest;
-import com.pawn.wantedcqrs.review.dto.CreateReviewResponse;
-import com.pawn.wantedcqrs.review.dto.ReadReviewsResponse;
-import com.pawn.wantedcqrs.review.dto.ReviewQueryCondition;
+import com.pawn.wantedcqrs.review.dto.*;
 import com.pawn.wantedcqrs.review.service.ReviewFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -46,13 +43,23 @@ public class ReviewController {
             @PathVariable Long productId
             , @RequestBody CreateReviewRequest request
     ) {
-
         Long userId = 1L; // TODO: 인증인가 붙이면서 변경 예정
 
         CreateReviewResponse response = reviewFacade.save(productId, userId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).
                 body(CommonApiResponse.ok(response));
+    }
+
+    @PutMapping("/reviews/{id}")
+    public ResponseEntity<CommonApiResponse<UpdateReviewResponse>> update(
+            @PathVariable Long id
+            , @RequestBody UpdateReviewRequest request
+    ) {
+        Long userId = 1L; // TODO: 인증인가 붙이면서 변경 예정
+        UpdateReviewResponse response = reviewFacade.update(id, userId, request);
+
+        return ResponseEntity.ok(CommonApiResponse.ok(response));
     }
 
 }

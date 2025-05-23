@@ -72,4 +72,20 @@ public class ReviewFacade {
         return reviewAssembler.toCreateReviewResponse(savedReview, foundUser);
     }
 
+    @Transactional
+    public UpdateReviewResponse update(Long id, Long userId, UpdateReviewRequest request) {
+        // 사용자 조회
+//        UserDto foundUser = userService.getUserBy(userId);
+
+        ReviewDto updatedReview = reviewService.update(id, request.toReviewDto(userId));
+
+        return UpdateReviewResponse.builder()
+                .id(updatedReview.getId())
+                .title(updatedReview.getTitle())
+                .content(updatedReview.getContent())
+                .rating(updatedReview.getRating())
+                .updatedAt(updatedReview.getUpdatedAt())
+                .build();
+    }
+
 }

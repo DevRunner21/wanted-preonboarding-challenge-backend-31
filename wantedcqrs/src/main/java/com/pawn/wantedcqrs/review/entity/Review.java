@@ -1,6 +1,7 @@
 package com.pawn.wantedcqrs.review.entity;
 
 import com.pawn.wantedcqrs.common.domain.AbstractDateTimeEntity;
+import com.pawn.wantedcqrs.review.dto.ReviewDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -59,6 +60,26 @@ public class Review extends AbstractDateTimeEntity {
         this.content = content;
         this.verifiedPurchase = verifiedPurchase;
         this.helpfulVotes = helpfulVotes;
+    }
+
+    public Review update(ReviewDto reviewDto) {
+        if(reviewDto == null) {
+            return this;
+        }
+
+        if(reviewDto.getTitle() != null) {
+            this.title = reviewDto.getTitle();
+        }
+
+        if(reviewDto.getContent() != null) {
+            this.content = reviewDto.getContent();
+        }
+
+        if(reviewDto.getRating() != null) {
+            this.rating = reviewDto.getRating();
+        }
+
+        return this;
     }
 
 }
