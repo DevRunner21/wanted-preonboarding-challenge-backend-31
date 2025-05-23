@@ -95,4 +95,14 @@ public class ProductController {
         return ResponseEntity.ok(CommonApiResponse.ok(null));
     }
 
+    @PostMapping("/{productId}/images")
+    public ResponseEntity<CommonApiResponse<CreateProductImageResponse>> createProductImage(
+            @PathVariable("productId") Long productId,
+            @RequestBody CreateProductImageRequest request
+    ) {
+        CreateProductImageResponse response = productFacade.addProductImage(productId, request);
+
+        return ResponseEntity.ok(CommonApiResponse.ok(response));
+    }
+
 }

@@ -5,6 +5,7 @@ import com.pawn.wantedcqrs.brand.service.BrandService;
 import com.pawn.wantedcqrs.category.dto.CategoryDto;
 import com.pawn.wantedcqrs.category.service.CategoryService;
 import com.pawn.wantedcqrs.common.exception.e4xx.ResourceNotFoundException;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionDto;
 import com.pawn.wantedcqrs.product.dto.*;
 import com.pawn.wantedcqrs.product.repository.dto.ProductSummaryProjection;
 import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionGroupDto;
@@ -214,6 +215,21 @@ public class ProductFacade {
                 .name(updatedProduct.getName())
                 .createdAt(updatedProduct.getCreatedAt())
                 .updatedAt(updatedProduct.getUpdatedAt())
+                .build();
+    }
+
+    @Transactional
+    public CreateProductImageResponse addProductImage(Long productId, CreateProductImageRequest request) {
+        ProductOptionDto productOption = productOptionGroupService.getProductOptionBy(productId, request.getOptionId());
+        ProductImageDto addedProductImage = productService.addProductImage(productId, request.toProductImageDto());
+
+        return CreateProductImageResponse.builder()
+                .id(addedProductImage.getId())
+                .url(addedProductImage.getUrl())
+                .altText(addedProductImage.getAltText())
+                .displayOrder(addedProductImage.getDisplayOrder())
+                .isPrimary(addedProductImage.isPrimary())
+                .optionId(addedProductImage.getOptionId())
                 .build();
     }
 

@@ -173,4 +173,23 @@ public class ProductService {
         productRepository.delete(target);
     }
 
+    @Transactional
+    public ProductImageDto addProductImage(Long productId, ProductImageDto productImageDto) {
+        Product foundProduct = productRepository.findById(productId).orElseThrow(ResourceNotFoundException.PRODUCT::getResponseException);
+
+        ProductImage newProductImage = ProductImage.builder()
+                .product(foundProduct)
+                .isPrimary(productImageDto.isPrimary())
+                .url(productImageDto.getUrl())
+                .altText(productImageDto.getAltText())
+                .displayOrder(productImageDto.getDisplayOrder())
+                .optionId(productImageDto.getOptionId())
+                .build();
+
+        foundProduct.addImage(newProductImage);
+        ProductImage savedImage = productImageRepository.save(newProductImage);
+
+        return ProductImageDto.fromEntity(savedImage);
+    }
+
 }
