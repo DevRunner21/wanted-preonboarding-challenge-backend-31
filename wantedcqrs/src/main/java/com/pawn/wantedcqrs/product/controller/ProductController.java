@@ -6,6 +6,7 @@ import com.pawn.wantedcqrs.common.util.PageableCreator;
 import com.pawn.wantedcqrs.product.dto.*;
 import com.pawn.wantedcqrs.product.entity.ProductStatus;
 import com.pawn.wantedcqrs.product.service.ProductFacade;
+import com.pawn.wantedcqrs.product.service.ProductService;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductFacade productFacade;
+
+    private final ProductService productService;
 
     @PostMapping()
     public ResponseEntity<CommonApiResponse<CreateProductResponse>> create(@RequestBody CreateProductRequest request) {
@@ -84,5 +87,12 @@ public class ProductController {
                 .body(CommonApiResponse.ok(response));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommonApiResponse> delete(@PathVariable("id") Long productId) {
+
+        productService.delete(productId);
+
+        return ResponseEntity.ok(CommonApiResponse.ok(null));
+    }
 
 }

@@ -165,4 +165,12 @@ public class ProductService {
     }
 
 
+    @Transactional
+    public void delete(Long productId) {
+        Product target = productRepository.findById(productId)
+                .orElseThrow(ResourceNotFoundException.PRODUCT::getResponseException);
+
+        productRepository.delete(target);
+    }
+
 }
