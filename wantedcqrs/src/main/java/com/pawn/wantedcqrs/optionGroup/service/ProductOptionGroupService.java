@@ -1,10 +1,10 @@
-package com.pawn.wantedcqrs.productOptionGroup.service;
+package com.pawn.wantedcqrs.optionGroup.service;
 
-import com.pawn.wantedcqrs.productOptionGroup.dto.ProductOptionDto;
-import com.pawn.wantedcqrs.productOptionGroup.dto.ProductOptionGroupDto;
-import com.pawn.wantedcqrs.productOptionGroup.dto.ProductStockProjection;
-import com.pawn.wantedcqrs.productOptionGroup.entity.ProductOptionGroup;
-import com.pawn.wantedcqrs.productOptionGroup.repository.ProductOptionGroupRepository;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionDto;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionGroupDto;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductStockProjection;
+import com.pawn.wantedcqrs.optionGroup.entity.ProductOptionGroup;
+import com.pawn.wantedcqrs.optionGroup.repository.ProductOptionGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

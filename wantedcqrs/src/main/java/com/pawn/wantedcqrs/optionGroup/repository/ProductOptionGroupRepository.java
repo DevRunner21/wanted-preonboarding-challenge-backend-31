@@ -1,6 +1,6 @@
-package com.pawn.wantedcqrs.productOptionGroup.repository;
+package com.pawn.wantedcqrs.optionGroup.repository;
 
-import com.pawn.wantedcqrs.productOptionGroup.entity.ProductOptionGroup;
+import com.pawn.wantedcqrs.optionGroup.entity.ProductOptionGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.pawn.wantedcqrs.productOptionGroup.entity;
+package com.pawn.wantedcqrs.optionGroup.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

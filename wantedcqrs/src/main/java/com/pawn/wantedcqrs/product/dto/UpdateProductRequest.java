@@ -2,8 +2,8 @@ package com.pawn.wantedcqrs.product.dto;
 
 import com.pawn.wantedcqrs.product.entity.Currency;
 import com.pawn.wantedcqrs.product.entity.ProductStatus;
-import com.pawn.wantedcqrs.productOptionGroup.dto.ProductOptionDto;
-import com.pawn.wantedcqrs.productOptionGroup.dto.ProductOptionGroupDto;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionDto;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionGroupDto;
 import lombok.Builder;
 import lombok.Getter;
 

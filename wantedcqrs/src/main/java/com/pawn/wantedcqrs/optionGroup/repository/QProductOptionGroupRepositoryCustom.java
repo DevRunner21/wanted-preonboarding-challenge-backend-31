@@ -1,6 +1,6 @@
-package com.pawn.wantedcqrs.productOptionGroup.repository;
+package com.pawn.wantedcqrs.optionGroup.repository;
 
-import com.pawn.wantedcqrs.productOptionGroup.dto.ProductStockProjection;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductStockProjection;
 
 import java.util.Collection;
 import java.util.List;

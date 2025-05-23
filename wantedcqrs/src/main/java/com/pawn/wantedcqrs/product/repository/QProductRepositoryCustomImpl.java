@@ -29,7 +29,7 @@ import static com.pawn.wantedcqrs.product.entity.QProduct.product;
 import static com.pawn.wantedcqrs.product.entity.QProductCategory.productCategory;
 import static com.pawn.wantedcqrs.product.entity.QProductDetail.productDetail;
 import static com.pawn.wantedcqrs.product.entity.QProductPrice.productPrice;
-import static com.pawn.wantedcqrs.productOptionGroup.entity.QProductOption.productOption;
+import static com.pawn.wantedcqrs.optionGroup.entity.QProductOption.productOption;
 import static com.pawn.wantedcqrs.review.entity.QReview.review;
 import static com.pawn.wantedcqrs.seller.entity.QSeller.seller;
 import static java.util.Objects.nonNull;

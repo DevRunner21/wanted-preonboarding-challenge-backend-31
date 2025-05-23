@@ -1,4 +1,4 @@
-package com.pawn.wantedcqrs.productOptionGroup.dto;
+package com.pawn.wantedcqrs.optionGroup.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.pawn.wantedcqrs.productOptionGroup.dto;
+package com.pawn.wantedcqrs.optionGroup.dto;
 
-import com.pawn.wantedcqrs.productOptionGroup.entity.ProductOption;
+import com.pawn.wantedcqrs.optionGroup.entity.ProductOption;
 import lombok.Data;
 
 import java.math.BigDecimal;

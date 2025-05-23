@@ -1,9 +1,7 @@
-package com.pawn.wantedcqrs.productOptionGroup.repository;
+package com.pawn.wantedcqrs.optionGroup.repository;
 
-import com.pawn.wantedcqrs.productOptionGroup.dto.ProductStockProjection;
-import com.pawn.wantedcqrs.productOptionGroup.dto.QProductStockProjection;
-import com.pawn.wantedcqrs.productOptionGroup.entity.QProductOption;
-import com.pawn.wantedcqrs.productOptionGroup.entity.QProductOptionGroup;
+import com.pawn.wantedcqrs.optionGroup.dto.ProductStockProjection;
+import com.pawn.wantedcqrs.optionGroup.dto.QProductStockProjection;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 
-import static com.pawn.wantedcqrs.productOptionGroup.entity.QProductOption.productOption;
-import static com.pawn.wantedcqrs.productOptionGroup.entity.QProductOptionGroup.productOptionGroup;
+import static com.pawn.wantedcqrs.optionGroup.entity.QProductOption.productOption;
+import static com.pawn.wantedcqrs.optionGroup.entity.QProductOptionGroup.productOptionGroup;
 
 @Repository
 @RequiredArgsConstructor
