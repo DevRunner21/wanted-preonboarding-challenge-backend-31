@@ -45,4 +45,11 @@ public class ReviewService {
         return new PageImpl<>(contents, pageable, reviewPage.getTotalElements());
     }
 
+    @Transactional
+    public ReviewDto save(ReviewDto reviewDto) {
+        Review savedReview = reviewRepository.save(reviewDto.toEntity());
+
+        return ReviewDto.fromEntity(savedReview);
+    }
+
 }

@@ -2,10 +2,7 @@ package com.pawn.wantedcqrs.review.service;
 
 import com.pawn.wantedcqrs.product.dto.ProductDto;
 import com.pawn.wantedcqrs.product.service.ProductService;
-import com.pawn.wantedcqrs.review.dto.ReadReviewsResponse;
-import com.pawn.wantedcqrs.review.dto.ReviewDto;
-import com.pawn.wantedcqrs.review.dto.ReviewQueryCondition;
-import com.pawn.wantedcqrs.review.dto.ReviewStatsProjection;
+import com.pawn.wantedcqrs.review.dto.*;
 import com.pawn.wantedcqrs.review.repository.dto.ReviewDistributionProjection;
 import com.pawn.wantedcqrs.user.dto.UserDto;
 import com.pawn.wantedcqrs.user.service.UserService;
@@ -44,7 +41,7 @@ public class ReviewFacade {
         Page<ReadReviewsResponse.ReviewResult> reviewResultPage = getReviewPageBy(condition, pageable);
 
         // ReviewStatsProjection, ReviewDistributionProjection, Page<ReadReviewsResponse.ReviewResult>를 합쳐서 ReadReviewsResponse 반환
-        return reviewAssembler.assemble(reviewResultPage, reviewStats, distribution);
+        return reviewAssembler.toReadReviewsResponse(reviewResultPage, reviewStats, distribution);
     }
 
     public Page<ReadReviewsResponse.ReviewResult> getReviewPageBy(ReviewQueryCondition condition, Pageable pageable) {
@@ -59,5 +56,20 @@ public class ReviewFacade {
         return reviewAssembler.toReviewResultPage(reviewPage, usersMap);
     }
 
+    @Transactional
+    public CreateReviewResponse save(Long productId, Long userId, CreateReviewRequest request) {
+
+        // 상품 Validation Check
+        ProductDto foundProduct = productService.getProductBy(productId);
+
+        // 사용자 조회
+        UserDto foundUser = userService.getUserBy(userId);
+
+        // 리뷰 저장
+        ReviewDto reviewDto = request.toReviewDto(productId, userId);
+        ReviewDto savedReview = reviewService.save(reviewDto);
+
+        return reviewAssembler.toCreateReviewResponse(savedReview, foundUser);
+    }
 
 }

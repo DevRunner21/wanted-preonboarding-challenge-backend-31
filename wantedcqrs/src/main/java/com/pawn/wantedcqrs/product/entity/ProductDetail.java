@@ -2,7 +2,6 @@ package com.pawn.wantedcqrs.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pawn.wantedcqrs.product.dto.ProductDetailDto;
-import com.pawn.wantedcqrs.product.dto.ProductDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

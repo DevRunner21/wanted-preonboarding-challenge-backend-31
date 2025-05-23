@@ -1,5 +1,6 @@
 package com.pawn.wantedcqrs.review.service;
 
+import com.pawn.wantedcqrs.review.dto.CreateReviewResponse;
 import com.pawn.wantedcqrs.review.dto.ReadReviewsResponse;
 import com.pawn.wantedcqrs.review.dto.ReviewDto;
 import com.pawn.wantedcqrs.review.dto.ReviewStatsProjection;
@@ -14,7 +15,7 @@ import java.util.Map;
 @Component
 public class ReviewAssembler {
 
-    public ReadReviewsResponse assemble(
+    public ReadReviewsResponse toReadReviewsResponse(
             Page<ReadReviewsResponse.ReviewResult> reviewPage,
             ReviewStatsProjection stats,
             ReviewDistributionProjection distribution
@@ -76,6 +77,24 @@ public class ReviewAssembler {
                     .helpfulVotes(review.getHelpfulVotes())
                     .build();
         });
+    }
+
+    public CreateReviewResponse toCreateReviewResponse(ReviewDto review, UserDto user) {
+        return CreateReviewResponse.builder()
+                .id(review.getId())
+                .user(CreateReviewResponse.User.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .avatarUrl(user.getAvatarUrl())
+                        .build())
+                .rating(review.getRating())
+                .title(review.getTitle())
+                .content(review.getContent())
+                .createdAt(review.getCreatedAt())
+                .updatedAt(review.getUpdatedAt())
+                .verifiedPurchase(review.getVerifiedPurchase())
+                .helpfulVotes(review.getHelpfulVotes())
+                .build();
     }
 
 }

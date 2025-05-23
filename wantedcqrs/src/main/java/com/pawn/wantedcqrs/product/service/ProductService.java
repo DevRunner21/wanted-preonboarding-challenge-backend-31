@@ -124,6 +124,7 @@ public class ProductService {
                 ));
     }
 
+    @Transactional(readOnly = true)
     public ProductDto getProductBy(Long productId) {
         Product foundProduct = productRepository.findById(productId).orElseThrow(ResourceNotFoundException.PRODUCT::getResponseException);
 

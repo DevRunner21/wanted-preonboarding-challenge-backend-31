@@ -15,8 +15,8 @@ public class ReviewDto {
     private Integer rating;
     private String title;
     private String content;
-    private Boolean verifiedPurchase ;
-    private Integer helpfulVotes;
+    private Boolean verifiedPurchase = false;
+    private Integer helpfulVotes = 0;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")

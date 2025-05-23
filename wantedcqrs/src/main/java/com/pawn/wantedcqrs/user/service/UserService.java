@@ -1,5 +1,6 @@
 package com.pawn.wantedcqrs.user.service;
 
+import com.pawn.wantedcqrs.common.exception.e4xx.ResourceNotFoundException;
 import com.pawn.wantedcqrs.user.dto.UserDto;
 import com.pawn.wantedcqrs.user.entity.User;
 import com.pawn.wantedcqrs.user.repository.UserRepository;
@@ -29,6 +30,15 @@ public class UserService {
         return foundUsers.stream()
                 .map(UserDto::fromEntity)
                 .collect(Collectors.toMap(UserDto::getId, user -> user));
+    }
+
+    public UserDto getUserBy(Long userId) {
+        if(userId == null) {
+            return null;
+        }
+        User user = userRepository.findById(userId).orElseThrow(ResourceNotFoundException.USER::getResponseException);
+
+        return UserDto.fromEntity(user);
     }
 
 }

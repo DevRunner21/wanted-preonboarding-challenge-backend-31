@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Table(name = "reviews")
 public class Review extends AbstractDateTimeEntity {
 
@@ -40,10 +41,12 @@ public class Review extends AbstractDateTimeEntity {
 
     //    verified_purchase: 구매 확인 여부
     @Column(name = "verified_purchase")
+    @Builder.Default
     private Boolean verifiedPurchase = false;
 
     //    helpful_votes: 도움됨 투표 수
     @Column(name = "helpful_votes")
+    @Builder.Default
     private Integer helpfulVotes = 0;
 
     @Builder
