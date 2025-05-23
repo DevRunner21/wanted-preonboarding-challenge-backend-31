@@ -8,6 +8,7 @@ import com.pawn.wantedcqrs.optionGroup.entity.ProductOption;
 import com.pawn.wantedcqrs.optionGroup.entity.ProductOptionGroup;
 import com.pawn.wantedcqrs.optionGroup.repository.ProductOptionGroupRepository;
 import com.pawn.wantedcqrs.optionGroup.repository.ProductOptionRepository;
+import com.pawn.wantedcqrs.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
@@ -82,6 +84,29 @@ public class ProductOptionGroupService {
         ProductOption savedOption = productOptionRepository.save(newOption);
 
         return ProductOptionDto.fromEntity(savedOption);
+    }
+
+    @Transactional
+    public void deleteOption(Long productId, Long optionId) {
+        List<ProductOptionGroup> optionGroups = productOptionGroupRepository.findProductOptionGroupsByProductId((productId));
+
+        Map<Long, ProductOption> optionMap = optionGroups.stream()
+                .flatMap(group -> {
+                    List<ProductOption> options = group.getOptions();
+                    return options == null ? Stream.empty() : options.stream();
+                })
+                .collect(Collectors.toMap(
+                        ProductOption::getId,
+                        Function.identity()
+                ));
+
+        if (!optionMap.containsKey(optionId)) {
+            throw ResourceNotFoundException.OPTION.getResponseException();
+        }
+
+        ProductOption target = optionMap.get(optionId);
+        ProductOptionGroup optionGroup = target.getOptionGroup();
+        optionGroup.removeOption(target);
     }
 
 }

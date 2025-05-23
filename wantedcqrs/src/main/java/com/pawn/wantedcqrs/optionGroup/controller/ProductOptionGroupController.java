@@ -4,6 +4,7 @@ import com.pawn.wantedcqrs.common.dto.response.CommonApiResponse;
 import com.pawn.wantedcqrs.optionGroup.dto.CreateOptionRequest;
 import com.pawn.wantedcqrs.optionGroup.dto.CreateOptionResponse;
 import com.pawn.wantedcqrs.optionGroup.service.ProductOptionGroupFacade;
+import com.pawn.wantedcqrs.optionGroup.service.ProductOptionGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,22 @@ public class ProductOptionGroupController {
 
     private final ProductOptionGroupFacade productOptionGroupFacade;
 
+    private final ProductOptionGroupService productOptionGroupService;
+
 
     @PostMapping("/products/{productId}/options")
-    public ResponseEntity<CommonApiResponse<CreateOptionResponse>>  createOption(@PathVariable Long productId, @RequestBody CreateOptionRequest request) {
+    public ResponseEntity<CommonApiResponse<CreateOptionResponse>> createOption(@PathVariable Long productId, @RequestBody CreateOptionRequest request) {
         CreateOptionResponse response = productOptionGroupFacade.createOption(productId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(CommonApiResponse.ok(response));
+    }
+
+    @DeleteMapping("/products/{productId}/options/{optionId}")
+    public ResponseEntity<CommonApiResponse> deleteOption(@PathVariable Long productId, @PathVariable Long optionId) {
+        productOptionGroupService.deleteOption(productId, optionId);
+
+        return ResponseEntity.ok(CommonApiResponse.ok(null));
     }
 
 }
