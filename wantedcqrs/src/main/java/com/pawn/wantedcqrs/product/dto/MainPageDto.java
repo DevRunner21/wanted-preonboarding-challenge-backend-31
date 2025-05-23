@@ -2,16 +2,20 @@ package com.pawn.wantedcqrs.product.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @Builder
 public class MainPageDto {
 
+    @Builder.Default
     private List<ProductSummaryResult> newProducts = new ArrayList<>();
+    @Builder.Default
     private List<ProductSummaryResult> popularProducts = new ArrayList<>();;
+    @Builder.Default
     private List<FeaturedCategory> featuredCategories = new ArrayList<>();;
 
     @Data

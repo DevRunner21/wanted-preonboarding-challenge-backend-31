@@ -1,10 +1,13 @@
 package com.pawn.wantedcqrs.optionGroup.service;
 
+import com.pawn.wantedcqrs.common.exception.e4xx.ResourceNotFoundException;
 import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionDto;
 import com.pawn.wantedcqrs.optionGroup.dto.ProductOptionGroupDto;
 import com.pawn.wantedcqrs.optionGroup.dto.ProductStockProjection;
+import com.pawn.wantedcqrs.optionGroup.entity.ProductOption;
 import com.pawn.wantedcqrs.optionGroup.entity.ProductOptionGroup;
 import com.pawn.wantedcqrs.optionGroup.repository.ProductOptionGroupRepository;
+import com.pawn.wantedcqrs.optionGroup.repository.ProductOptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 public class ProductOptionGroupService {
 
     private final ProductOptionGroupRepository productOptionGroupRepository;
+
+    private final ProductOptionRepository productOptionRepository;
 
     @Transactional
     public List<ProductOptionGroupDto> createProductOptionGroupsByProductId(Long productId, List<ProductOptionGroupDto> productOptionGroupParams) {
@@ -55,6 +60,28 @@ public class ProductOptionGroupService {
         return foundProductOptionGroups.stream()
                 .map(ProductOptionGroupDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ProductOptionDto saveOption(Long productId, ProductOptionDto productOptionDto) {
+
+        ProductOptionGroup foundOptionGroup = productOptionGroupRepository.findProductOptionGroupByIdAndProductId(productOptionDto.getOptionGroupId(), productId)
+                .orElseThrow(ResourceNotFoundException.OPTION_GROUP::getResponseException);
+
+        ProductOption newOption = ProductOption.builder()
+                .name(productOptionDto.getName())
+                .sku(productOptionDto.getSku())
+                .additionalPrice(productOptionDto.getAdditionalPrice())
+                .stock(productOptionDto.getStock())
+                .displayOrder(productOptionDto.getDisplayOrder())
+                .build();
+
+        foundOptionGroup.addOption(newOption);
+//        ProductOptionGroup optionGroup = productOptionGroupRepository.save(foundOptionGroup);
+        newOption.setOptionGroup(foundOptionGroup);
+        ProductOption savedOption = productOptionRepository.save(newOption);
+
+        return ProductOptionDto.fromEntity(savedOption);
     }
 
 }
